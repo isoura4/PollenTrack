@@ -71,8 +71,12 @@ struct ForecastView: View {
             .font(.caption.bold())
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
-            .background(level.color.opacity(0.85))
-            .background(.ultraThinMaterial)
+            .background {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(.ultraThinMaterial)
+                    .overlay(level.color.opacity(0.7))
+                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            }
             .foregroundStyle(level.textColor)
             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
             .accessibilityLabel("Niveau global : \(level.label)")

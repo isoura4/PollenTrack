@@ -150,8 +150,11 @@ struct HomeView: View {
             }
         }
         .padding(20)
-        .background(level.color.opacity(0.85))
-        .background(.ultraThinMaterial)
+        .background {
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .fill(.ultraThinMaterial)
+                .overlay(level.color.opacity(0.7))
+        }
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         .shadow(color: level.color.opacity(0.35), radius: 12, x: 0, y: 6)
         .overlay(
@@ -206,8 +209,12 @@ struct HomeView: View {
                 .font(.caption.bold())
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
-                .background(taxon.level.color.opacity(0.85))
-                .background(.ultraThinMaterial)
+                .background {
+                    Capsule()
+                        .fill(.ultraThinMaterial)
+                        .overlay(taxon.level.color.opacity(0.7))
+                        .clipShape(Capsule())
+                }
                 .foregroundStyle(taxon.level.textColor)
                 .clipShape(Capsule())
         }

@@ -12,7 +12,7 @@ Built with **SwiftUI** and designed for the **iOS 26 Liquid Glass** aesthetic.
 |:-----:|:------------:|:--------------:|:--------:|
 | ![Login](docs/screenshots/login.png) | ![Home](docs/screenshots/home.png) | ![Forecast](docs/screenshots/forecast.png) | ![Settings](docs/screenshots/settings.png) |
 
-> **Note :** screenshots are taken on an iPhone running iOS 26 with the Liquid Glass UI.
+> **Note:** screenshots are taken on an iPhone running iOS 26 with the Liquid Glass UI.
 
 ---
 
