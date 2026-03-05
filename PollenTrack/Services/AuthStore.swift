@@ -109,4 +109,5 @@ enum APIConstants {
     static let baseURL        = "https://admindata.atmo-france.org"
     static let pollenEndpoint = "/api/opendata/pollen/"
     static let geocodeURL     = "https://api-adresse.data.gouv.fr/reverse/"
+    static let communesURL    = "https://geo.api.gouv.fr/communes"
 }
