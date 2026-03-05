@@ -1,6 +1,7 @@
 {
   "name": "PollenTrack Source",
   "identifier": "com.pollentrack.source",
+  "sourceURL": "https://raw.githubusercontent.com/isoura4/PollenTrack/main/sidestore-source.json",
   "subtitle": "Suivi du pollen en temps réel en France",
   "description": "Source officielle de PollenTrack — application de suivi des indices pollen en France basée sur les données ouvertes Atmo France.",
   "iconURL": "https://raw.githubusercontent.com/isoura4/PollenTrack/main/docs/icon.png",
@@ -19,7 +20,7 @@
       "localizedDescription": "PollenTrack affiche l'indice pollen en temps réel et les prévisions sur 3 jours pour toutes les communes de France.\n\n• Indice global et détail par taxon (Aulne, Bouleau, Olivier, Graminées, Armoise, Ambroisie)\n• Prévisions J+3 avec barres de niveaux colorées\n• Recommandations santé adaptées au niveau de pollen\n• Localisation GPS ou saisie du code postal\n• Design iOS 26 Liquid Glass\n\nDonnées : Atmo France / AASQA — Licence ODbL 1.0\n\nConfidentialité : aucune donnée n'est envoyée à des tiers. Seules les API gouvernementales françaises (géocodage) et Atmo France (données pollen) sont contactées.",
       "iconURL": "https://raw.githubusercontent.com/isoura4/PollenTrack/main/docs/icon.png",
       "tintColor": "50CCAA",
-      "screenshots": [
+      "screenshotURLs": [
         "https://raw.githubusercontent.com/isoura4/PollenTrack/main/docs/screenshots/login.png",
         "https://raw.githubusercontent.com/isoura4/PollenTrack/main/docs/screenshots/home.png",
         "https://raw.githubusercontent.com/isoura4/PollenTrack/main/docs/screenshots/forecast.png",
