@@ -56,7 +56,11 @@ final class LocationService: NSObject, ObservableObject {
         isLocating = true
         usingPostalCode = true
 
-        var components = URLComponents(string: APIConstants.communesURL)!
+        guard var components = URLComponents(string: APIConstants.communesURL) else {
+            isLocating = false
+            errorMessage = "URL de recherche invalide."
+            return
+        }
         components.queryItems = [
             URLQueryItem(name: "codePostal", value: trimmed),
             URLQueryItem(name: "fields",     value: "nom,code"),
