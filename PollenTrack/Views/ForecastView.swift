@@ -60,8 +60,7 @@ struct ForecastView: View {
             }
         }
         .padding()
-        .background(Color(.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .glassCard(cornerRadius: 20)
         .accessibilityElement(children: .contain)
         .accessibilityLabel("\(dayLabel) : \(data.pollenLevel.label)")
     }
@@ -72,9 +71,10 @@ struct ForecastView: View {
             .font(.caption.bold())
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
-            .background(level.color)
+            .background(level.color.opacity(0.85))
+            .background(.ultraThinMaterial)
             .foregroundStyle(level.textColor)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
             .accessibilityLabel("Niveau global : \(level.label)")
     }
 
@@ -136,8 +136,7 @@ struct ForecastView: View {
             }
         }
         .padding()
-        .background(Color(.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .glassCard(cornerRadius: 20)
     }
 }
 

@@ -1,4 +1,4 @@
-name: Build IPA for AltStore
+name: Build IPA
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     name: Build & export IPA
-    runs-on: macos-14          # Xcode 15 / Swift 5.9
+    runs-on: macos-15          # Xcode 26 / Swift 6
 
     permissions:
       contents: read
@@ -20,18 +20,14 @@ jobs:
         uses: actions/checkout@v4
 
       # ── Select Xcode version ─────────────────────────────────────────────────
-      - name: Select Xcode 15
-        run: sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
+      - name: Select latest Xcode
+        run: sudo xcode-select -s "$(ls -d /Applications/Xcode*.app | sort -V | tail -1)/Contents/Developer"
 
       # ── Build (unsigned) ─────────────────────────────────────────────────────
       # Builds an unsigned archive; no signing certificate is required in CI.
-      # To produce a distributable IPA signed for AltStore, supply the following
-      # repository secrets:
-      #   BUILD_CERTIFICATE_BASE64   – base64-encoded .p12 distribution certificate
-      #   P12_PASSWORD               – password for the .p12 file
-      #   BUILD_PROVISION_PROFILE_BASE64 – base64-encoded .mobileprovision
-      #   KEYCHAIN_PASSWORD          – a temporary keychain password
-      # and uncomment the "Sign & export IPA" step below.
+      # The resulting IPA can be installed directly on iOS 26 without a
+      # signing server — use AltStore, SideStore, or drag-and-drop install
+      # via Finder / Apple Devices on macOS.
       - name: Build archive (unsigned)
         run: |
           xcodebuild archive \
@@ -44,52 +40,9 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             | xcpretty
 
-      # ── (Optional) Sign & export IPA ─────────────────────────────────────────
-      # Uncomment this step and supply the secrets listed above to produce a
-      # fully signed IPA that can be sideloaded with AltStore.
-      #
-      # - name: Install signing certificate & provisioning profile
-      #   env:
-      #     BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-      #     P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
-      #     BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
-      #     KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-      #   run: |
-      #     CERT_PATH=$RUNNER_TEMP/cert.p12
-      #     PP_PATH=$RUNNER_TEMP/profile.mobileprovision
-      #     KEYCHAIN_PATH=$RUNNER_TEMP/signing.keychain-db
-      #
-      #     echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o "$CERT_PATH"
-      #     echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o "$PP_PATH"
-      #
-      #     security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
-      #     security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
-      #     security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
-      #     security import "$CERT_PATH" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
-      #     security list-keychain -d user -s "$KEYCHAIN_PATH"
-      #
-      #     mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-      #     cp "$PP_PATH" ~/Library/MobileDevice/Provisioning\ Profiles/
-      #
-      # - name: Sign & export IPA
-      #   run: |
-      #     cat > $RUNNER_TEMP/ExportOptions.plist <<'EOF'
-      #     <?xml version="1.0" encoding="UTF-8"?>
-      #     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
-      #       "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      #     <plist version="1.0"><dict>
-      #       <key>method</key><string>ad-hoc</string>
-      #       <key>compileBitcode</key><false/>
-      #     </dict></plist>
-      #     EOF
-      #     xcodebuild -exportArchive \
-      #       -archivePath "$RUNNER_TEMP/PollenTrack.xcarchive" \
-      #       -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
-      #       -exportPath "$RUNNER_TEMP/IPA"
-
       # ── Package unsigned .app as .ipa ────────────────────────────────────────
-      # Creates a minimal IPA from the unsigned build so the artifact is
-      # directly usable for local AltStore sideloading once re-signed on device.
+      # Creates a minimal IPA from the unsigned build.  On iOS 26 this IPA
+      # can be sideloaded directly — no signing server (AltServer) required.
       - name: Package unsigned IPA
         run: |
           APP_PATH=$(find "$RUNNER_TEMP/PollenTrack.xcarchive" \
