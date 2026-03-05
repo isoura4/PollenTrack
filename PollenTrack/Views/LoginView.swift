@@ -96,11 +96,13 @@ struct LoginView: View {
                             .font(.footnote)
                             .foregroundStyle(.white.opacity(0.85))
 
-                        Link("Créer un compte sur Atmo France",
-                             destination: URL(string: "https://admindata.atmo-france.org")!)
-                            .font(.footnote.bold())
-                            .foregroundStyle(.white)
-                            .accessibilityLabel("Créer un compte sur Atmo France")
+                        if let accountURL = URL(string: "https://admindata.atmo-france.org") {
+                            Link("Créer un compte sur Atmo France",
+                                 destination: accountURL)
+                                .font(.footnote.bold())
+                                .foregroundStyle(.white)
+                                .accessibilityLabel("Créer un compte sur Atmo France")
+                        }
                     }
 
                     Spacer(minLength: 40)

@@ -53,8 +53,8 @@ struct HomeView: View {
                         locationService.requestLocation()
                     } label: {
                         Image(systemName: "location.circle")
-                            .accessibilityLabel("Actualiser la localisation")
                     }
+                    .accessibilityLabel("Actualiser la localisation")
                 }
             }
         }
@@ -274,17 +274,9 @@ struct HomeView: View {
 
     // MARK: - Refresh
     private func refresh() async {
+        // Trigger a location update; MainTabView observes inseeCode changes
+        // and is responsible for fetching pollen data accordingly.
         locationService.requestLocation()
-        if let token = authStore.token,
-           authStore.isTokenValid,
-           !locationService.inseeCode.isEmpty {
-            do {
-                try await atmoService.fetchPollen(token: token, codeZone: locationService.inseeCode)
-            } catch is AuthError {
-                // Token expired or invalid — force logout
-                authStore.logout()
-            }
-        }
     }
 }
 

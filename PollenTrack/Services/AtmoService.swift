@@ -8,8 +8,15 @@ final class AtmoService: ObservableObject {
     @Published var errorMessage: String?
     @Published private(set) var communeName: String = ""
 
+    // MARK: - Shared formatter
+    private static let dateFormatter: ISO8601DateFormatter = {
+        let f = ISO8601DateFormatter()
+        f.formatOptions = [.withFullDate]
+        return f
+    }()
+
     // MARK: - Fetch pollen
-    // Throws AuthError.tokenExpired on a 401 response so callers can react (e.g., force logout).
+    // Throws AuthError.tokenExpired on 401/403 so callers can react (e.g., force logout).
     // Other errors are surfaced via `errorMessage` to avoid crashing the UI.
     func fetchPollen(token: String, codeZone: String) async throws {
         isLoading = true
@@ -17,11 +24,9 @@ final class AtmoService: ObservableObject {
 
         let today = Date()
         let calendar = Calendar.current
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withFullDate]
 
-        let startDate = formatter.string(from: today)
-        let endDate   = formatter.string(from: calendar.date(byAdding: .day, value: 2, to: today) ?? today)
+        let startDate = Self.dateFormatter.string(from: today)
+        let endDate   = Self.dateFormatter.string(from: calendar.date(byAdding: .day, value: 2, to: today) ?? today)
 
         var components = URLComponents(string: APIConstants.baseURL + APIConstants.pollenEndpoint)!
         components.queryItems = [
@@ -44,7 +49,7 @@ final class AtmoService: ObservableObject {
             guard let http = response as? HTTPURLResponse else {
                 throw PollenError.networkError("Réponse invalide")
             }
-            if http.statusCode == 401 {
+            if http.statusCode == 401 || http.statusCode == 403 {
                 isLoading = false
                 throw AuthError.tokenExpired
             }
