@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>PollenTrack utilise votre position pour afficher l'indice pollen de votre commune.</string>
+	<string>PollenTrack utilise votre position pour afficher l'indice pollen de votre commune. Vous pouvez aussi saisir votre code postal à la place.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>fr</string>
 	<key>CFBundleExecutable</key>

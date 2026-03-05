@@ -61,6 +61,39 @@ struct SettingsView: View {
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .glassCard(cornerRadius: 20)
+
+                    // MARK: Confidentialité
+                    VStack(alignment: .leading, spacing: 10) {
+                        Label("Confidentialité", systemImage: "lock.shield")
+                            .font(.headline)
+
+                        privacyRow(
+                            icon: "location.fill",
+                            title: "Localisation GPS",
+                            detail: "Envoyée uniquement à api-adresse.data.gouv.fr (API gouvernementale française) pour obtenir le code INSEE de votre commune. Désactivable en utilisant le code postal."
+                        )
+
+                        privacyRow(
+                            icon: "envelope",
+                            title: "Code postal",
+                            detail: "Envoyé uniquement à geo.api.gouv.fr (API gouvernementale française). Aucune coordonnée GPS n'est transmise."
+                        )
+
+                        privacyRow(
+                            icon: "leaf",
+                            title: "Données pollen",
+                            detail: "Récupérées depuis admindata.atmo-france.org avec votre code INSEE. Aucune donnée personnelle n'est partagée."
+                        )
+
+                        privacyRow(
+                            icon: "hand.raised.fill",
+                            title: "Aucun tiers",
+                            detail: "Pas de traqueur, pas d'analytics, pas de publicité. Toutes les données restent sur votre appareil."
+                        )
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .glassCard(cornerRadius: 20)
                 }
                 .padding()
             }
@@ -72,4 +105,24 @@ struct SettingsView: View {
 #Preview {
     SettingsView()
         .environmentObject(AuthStore())
+}
+
+// MARK: - Privacy row helper
+private extension SettingsView {
+    func privacyRow(icon: String, title: String, detail: String) -> some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: icon)
+                .foregroundStyle(.secondary)
+                .frame(width: 20)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.subheadline.bold())
+                Text(detail)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
 }

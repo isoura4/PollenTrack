@@ -5,6 +5,9 @@ struct HomeView: View {
     @EnvironmentObject private var atmoService:   AtmoService
     @EnvironmentObject private var locationService: LocationService
 
+    @State private var postalCodeInput: String = ""
+    @State private var showPostalCodeField: Bool = false
+
     private var todayData: PollenData? {
         atmoService.pollenData.first
     }
@@ -15,6 +18,11 @@ struct HomeView: View {
                 VStack(spacing: 20) {
                     // Location bar
                     locationBar
+
+                    // Postal code input
+                    if showPostalCodeField {
+                        postalCodeBar
+                    }
 
                     if atmoService.isLoading || locationService.isLocating {
                         ProgressView("Chargement…")
@@ -49,12 +57,24 @@ struct HomeView: View {
             .navigationTitle("Indice Pollen")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        locationService.requestLocation()
-                    } label: {
-                        Image(systemName: "location.circle")
+                    HStack(spacing: 12) {
+                        Button {
+                            withAnimation {
+                                showPostalCodeField.toggle()
+                            }
+                        } label: {
+                            Image(systemName: showPostalCodeField ? "keyboard.chevron.compact.down" : "keyboard")
+                        }
+                        .accessibilityLabel(showPostalCodeField ? "Masquer le code postal" : "Saisir un code postal")
+
+                        Button {
+                            showPostalCodeField = false
+                            locationService.requestLocation()
+                        } label: {
+                            Image(systemName: "location.circle")
+                        }
+                        .accessibilityLabel("Localisation GPS")
                     }
-                    .accessibilityLabel("Actualiser la localisation")
                 }
             }
         }
@@ -68,6 +88,10 @@ struct HomeView: View {
                     .foregroundStyle(.blue)
                     .symbolEffect(.pulse)
                     .accessibilityLabel("Localisation en cours")
+            } else if locationService.usingPostalCode {
+                Image(systemName: "mappin.circle.fill")
+                    .foregroundStyle(.green)
+                    .accessibilityLabel("Code postal utilisé")
             } else {
                 Image(systemName: "location.fill")
                     .foregroundStyle(.secondary)
@@ -84,6 +108,46 @@ struct HomeView: View {
         .padding(.horizontal, 4)
         .padding(.vertical, 8)
         .glassCard(cornerRadius: 14)
+    }
+
+    // MARK: - Postal code input
+    private var postalCodeBar: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "envelope")
+                .foregroundStyle(.secondary)
+                .accessibilityHidden(true)
+
+            TextField("Code postal (ex : 75001)", text: $postalCodeInput)
+                .keyboardType(.numberPad)
+                .textFieldStyle(.plain)
+                .accessibilityLabel("Code postal")
+                .onChange(of: postalCodeInput) { _, newValue in
+                    // Keep only digits, max 5
+                    let filtered = String(newValue.filter(\.isNumber).prefix(5))
+                    if filtered != newValue {
+                        postalCodeInput = filtered
+                    }
+                }
+
+            Button {
+                Task {
+                    await locationService.lookupPostalCode(postalCodeInput)
+                }
+            } label: {
+                Image(systemName: "magnifyingglass")
+                    .fontWeight(.semibold)
+                    .padding(8)
+                    .background(Color(hex: "#50CCAA").opacity(0.85))
+                    .foregroundStyle(.white)
+                    .clipShape(Circle())
+            }
+            .disabled(postalCodeInput.count != 5)
+            .accessibilityLabel("Rechercher par code postal")
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .glassCard(cornerRadius: 14)
+        .transition(.move(edge: .top).combined(with: .opacity))
     }
 
     // MARK: - Alert banner
