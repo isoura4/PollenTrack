@@ -81,6 +81,9 @@ struct HomeView: View {
                 .foregroundStyle(.primary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 4)
+        .padding(.vertical, 8)
+        .glassCard(cornerRadius: 14)
     }
 
     // MARK: - Alert banner
@@ -101,7 +104,7 @@ struct HomeView: View {
         }
         .padding()
         .background(Color.orange.opacity(0.15))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .glassCard(cornerRadius: 16)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Alerte pollen" + (pollen.map { ". Taxon responsable : \($0)" } ?? ""))
     }
@@ -130,6 +133,7 @@ struct HomeView: View {
                 Image(systemName: "wind")
                     .font(.system(size: 44))
                     .foregroundStyle(level.textColor.opacity(0.6))
+                    .symbolEffect(.breathe)
                     .accessibilityHidden(true)
             }
 
@@ -146,9 +150,24 @@ struct HomeView: View {
             }
         }
         .padding(20)
-        .background(level.color)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: level.color.opacity(0.45), radius: 8, x: 0, y: 4)
+        .background {
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .fill(.ultraThinMaterial)
+                .overlay(level.color.opacity(0.7))
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .shadow(color: level.color.opacity(0.35), radius: 12, x: 0, y: 6)
+        .overlay(
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .strokeBorder(
+                    LinearGradient(
+                        colors: [.white.opacity(0.4), .white.opacity(0.1)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 0.5
+                )
+        )
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Indice pollen : \(level.rawValue) sur 6, \(level.label)")
     }
@@ -165,8 +184,7 @@ struct HomeView: View {
             }
         }
         .padding()
-        .background(Color(.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .glassCard(cornerRadius: 20)
     }
 
     private func taxonRow(taxon: TaxonData) -> some View {
@@ -191,7 +209,12 @@ struct HomeView: View {
                 .font(.caption.bold())
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
-                .background(taxon.level.color)
+                .background {
+                    Capsule()
+                        .fill(.ultraThinMaterial)
+                        .overlay(taxon.level.color.opacity(0.7))
+                        .clipShape(Capsule())
+                }
                 .foregroundStyle(taxon.level.textColor)
                 .clipShape(Capsule())
         }
@@ -219,8 +242,7 @@ struct HomeView: View {
             }
         }
         .padding()
-        .background(Color(.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .glassCard(cornerRadius: 20)
     }
 
     private func recommendations(for level: PollenLevel) -> [String] {

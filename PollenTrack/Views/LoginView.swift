@@ -26,6 +26,7 @@ struct LoginView: View {
                         Image(systemName: "wind")
                             .font(.system(size: 64, weight: .light))
                             .foregroundStyle(.white)
+                            .symbolEffect(.breathe)
                             .accessibilityHidden(true)
 
                         Text("PollenTrack")
@@ -39,13 +40,13 @@ struct LoginView: View {
                     }
                     .padding(.top, 60)
 
-                    // Login form
+                    // Login form — glass card
                     VStack(spacing: 16) {
                         TextField("Nom d'utilisateur", text: $username)
                             .textFieldStyle(.plain)
                             .padding()
-                            .background(Color(.systemBackground).opacity(0.9))
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .background(.ultraThinMaterial)
+                            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
                             .accessibilityLabel("Nom d'utilisateur")
@@ -53,8 +54,8 @@ struct LoginView: View {
                         SecureField("Mot de passe", text: $password)
                             .textFieldStyle(.plain)
                             .padding()
-                            .background(Color(.systemBackground).opacity(0.9))
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .background(.ultraThinMaterial)
+                            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                             .accessibilityLabel("Mot de passe")
 
                         if let error = errorMessage {
@@ -82,13 +83,15 @@ struct LoginView: View {
                             }
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color(hex: "#50CCAA"))
-                            .clipShape(RoundedRectangle(cornerRadius: 14))
+                            .background(Color(hex: "#50CCAA").opacity(0.85))
+                            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                            .shadow(color: Color(hex: "#50CCAA").opacity(0.3), radius: 8, y: 4)
                         }
                         .disabled(isLoading || username.isEmpty || password.isEmpty)
                         .accessibilityLabel("Se connecter")
                     }
-                    .padding(.horizontal, 24)
+                    .padding(24)
+                    .glassCard(cornerRadius: 24)
 
                     // Create account link
                     VStack(spacing: 8) {
