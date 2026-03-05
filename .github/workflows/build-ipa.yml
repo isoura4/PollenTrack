@@ -26,8 +26,8 @@ jobs:
       # ── Build (unsigned) ─────────────────────────────────────────────────────
       # Builds an unsigned archive; no signing certificate is required in CI.
       # The resulting IPA can be installed directly on iOS 26 without a
-      # signing server — use AltStore, SideStore, or drag-and-drop install
-      # via Finder / Apple Devices on macOS.
+      # signing server — use SideStore or drag-and-drop install via
+      # Finder / Apple Devices on macOS.
       - name: Build archive (unsigned)
         run: |
           xcodebuild archive \
@@ -42,7 +42,7 @@ jobs:
 
       # ── Package unsigned .app as .ipa ────────────────────────────────────────
       # Creates a minimal IPA from the unsigned build.  On iOS 26 this IPA
-      # can be sideloaded directly — no signing server (AltServer) required.
+      # can be sideloaded directly via SideStore — no signing server required.
       - name: Package unsigned IPA
         run: |
           APP_PATH=$(find "$RUNNER_TEMP/PollenTrack.xcarchive" \

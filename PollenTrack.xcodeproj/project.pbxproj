@@ -20,6 +20,7 @@
 		AA00000000000024 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000023 /* SettingsView.swift */; };
 		AA00000000000026 /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000025 /* Color+Hex.swift */; };
 		AA00000000000031 /* GlassEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000030 /* GlassEffect.swift */; };
+		AA00000000000032 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000033 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		AA00000000000025 /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
 		AA00000000000027 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA00000000000030 /* GlassEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassEffect.swift; sourceTree = "<group>"; };
+		AA00000000000033 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			children = (
 				AA0000000000000F /* PollenTrackApp.swift */,
 				AA00000000000027 /* Info.plist */,
+				AA00000000000033 /* Assets.xcassets */,
 				AA00000000000028 /* Models */,
 				AA00000000000029 /* Services */,
 				AA0000000000002A /* Views */,
@@ -179,6 +182,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA00000000000032 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

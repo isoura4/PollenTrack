@@ -12,7 +12,7 @@ Built with **SwiftUI** and designed for the **iOS 26 Liquid Glass** aesthetic.
 |:-----:|:------------:|:--------------:|:--------:|
 | ![Login](docs/screenshots/login.png) | ![Home](docs/screenshots/home.png) | ![Forecast](docs/screenshots/forecast.png) | ![Settings](docs/screenshots/settings.png) |
 
-> **Note:** screenshots are taken on an iPhone running iOS 26 with the Liquid Glass UI.
+> **Note:** screenshots are temporary placeholders — final screenshots will be added later.
 
 ---
 
@@ -62,15 +62,15 @@ Built with **SwiftUI** and designed for the **iOS 26 Liquid Glass** aesthetic.
 
 iOS 26 allows **direct IPA sideloading** without requiring a signing server.
 
-### Option 1 — AltStore source (recommended)
+### Option 1 — SideStore source (recommended)
 
-Add the PollenTrack source directly in AltStore or SideStore:
+Add the PollenTrack source directly in SideStore:
 
 ```
-https://raw.githubusercontent.com/isoura4/PollenTrack/main/altstore-source.json
+https://raw.githubusercontent.com/isoura4/PollenTrack/main/sidestore-source.json
 ```
 
-1. Open **AltStore** (or **SideStore**) on your iPhone.
+1. Open **SideStore** on your iPhone.
 2. Go to the **Sources** tab → tap **+**.
 3. Paste the URL above and tap **Add**.
 4. PollenTrack will appear in your sources — tap **Install**.
@@ -82,7 +82,7 @@ https://raw.githubusercontent.com/isoura4/PollenTrack/main/altstore-source.json
 3. Download the `PollenTrack-<sha>` artifact (a `.zip` containing the `.ipa`).
 4. Unzip and transfer the `.ipa` to your iPhone:
    - **Finder / Apple Devices (macOS):** connect your device and drag the `.ipa` onto the device panel.
-   - **AltStore / SideStore:** import the `.ipa` from the Files app — no AltServer required on iOS 26.
+   - **SideStore:** import the `.ipa` from the Files app — no signing server required on iOS 26.
 
 ### Option 3 — Build from source
 
