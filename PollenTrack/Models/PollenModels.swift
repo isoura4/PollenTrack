@@ -70,7 +70,13 @@ struct TaxonData: Identifiable {
 // MARK: - Pollen Data
 
 struct PollenData: Decodable, Identifiable {
-    let id: UUID = UUID()
+    // Stable identity derived from API fields; avoids spurious SwiftUI list animations on refresh.
+    var id: String {
+        let zone = code_zone ?? "unknown_zone"
+        let date = date_ech ?? "unknown_date"
+        return "\(zone)_\(date)"
+    }
+
     let date_ech: String?
     let code_qual: Int?
     let lib_qual: String?
@@ -99,19 +105,26 @@ struct PollenData: Decodable, Identifiable {
         case pollen_resp, alerte
     }
 
+    // MARK: - Shared formatters (cached to avoid expensive per-call allocation)
+    private enum Formatters {
+        static let iso8601: ISO8601DateFormatter = ISO8601DateFormatter()
+        static let display: DateFormatter = {
+            let f = DateFormatter()
+            f.locale = Locale(identifier: "fr_FR")
+            f.dateStyle = .medium
+            f.timeStyle = .none
+            return f
+        }()
+    }
+
     var date: Date? {
         guard let raw = date_ech else { return nil }
-        let formatter = ISO8601DateFormatter()
-        return formatter.date(from: raw)
+        return Formatters.iso8601.date(from: raw)
     }
 
     var formattedDate: String {
         guard let d = date else { return date_ech ?? "" }
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "fr_FR")
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter.string(from: d)
+        return Formatters.display.string(from: d)
     }
 
     var pollenLevel: PollenLevel {

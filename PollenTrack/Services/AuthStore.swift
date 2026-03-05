@@ -1,5 +1,4 @@
 import Foundation
-import Combine
 
 // NOTE: In production, the token should be stored in the iOS Keychain instead of UserDefaults
 // for enhanced security. UserDefaults is used here for simplicity.
@@ -47,8 +46,13 @@ final class AuthStore: ObservableObject {
         guard let http = response as? HTTPURLResponse else {
             throw AuthError.networkError("Réponse invalide")
         }
-        guard http.statusCode == 200 else {
+        switch http.statusCode {
+        case 200:
+            break
+        case 401, 403:
             throw AuthError.invalidCredentials
+        default:
+            throw AuthError.networkError("Erreur serveur (code \(http.statusCode))")
         }
 
         let authResponse = try JSONDecoder().decode(AuthResponse.self, from: data)

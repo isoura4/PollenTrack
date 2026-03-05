@@ -9,7 +9,9 @@ final class AtmoService: ObservableObject {
     @Published private(set) var communeName: String = ""
 
     // MARK: - Fetch pollen
-    func fetchPollen(token: String, codeZone: String) async {
+    // Throws AuthError.tokenExpired on a 401 response so callers can react (e.g., force logout).
+    // Other errors are surfaced via `errorMessage` to avoid crashing the UI.
+    func fetchPollen(token: String, codeZone: String) async throws {
         isLoading = true
         errorMessage = nil
 
@@ -43,6 +45,7 @@ final class AtmoService: ObservableObject {
                 throw PollenError.networkError("Réponse invalide")
             }
             if http.statusCode == 401 {
+                isLoading = false
                 throw AuthError.tokenExpired
             }
             guard http.statusCode == 200 else {
@@ -55,8 +58,8 @@ final class AtmoService: ObservableObject {
             }
             pollenData = sorted
             communeName = sorted.first?.lib_zone ?? ""
-        } catch let error as AuthError {
-            errorMessage = error.errorDescription
+        } catch let authError as AuthError {
+            throw authError  // propagate to caller to handle (e.g. logout)
         } catch let error as PollenError {
             errorMessage = error.errorDescription
         } catch {

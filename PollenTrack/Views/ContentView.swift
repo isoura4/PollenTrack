@@ -5,13 +5,13 @@ struct ContentView: View {
 
     var body: some View {
         Group {
-            if authStore.isLoggedIn {
+            if authStore.isLoggedIn && authStore.isTokenValid {
                 MainTabView()
             } else {
                 LoginView()
             }
         }
-        .animation(.easeInOut, value: authStore.isLoggedIn)
+        .animation(.easeInOut, value: authStore.isLoggedIn && authStore.isTokenValid)
     }
 }
 

@@ -21,15 +21,19 @@ struct SettingsView: View {
 
                 // MARK: Ressources
                 Section("Ressources") {
-                    Link(destination: URL(string: "https://www.atmo-france.org/article/reseau-national-surveillance-aerobiologique")!) {
-                        Label("Documentation pollen Atmo France", systemImage: "doc.text")
+                    if let atmoURL = URL(string: "https://www.atmo-france.org/article/reseau-national-surveillance-aerobiologique") {
+                        Link(destination: atmoURL) {
+                            Label("Documentation pollen Atmo France", systemImage: "doc.text")
+                        }
+                        .accessibilityLabel("Documentation pollen Atmo France")
                     }
-                    .accessibilityLabel("Documentation pollen Atmo France")
 
-                    Link(destination: URL(string: "https://admindata.atmo-france.org/api/swagger/")!) {
-                        Label("Documentation API Swagger", systemImage: "server.rack")
+                    if let swaggerURL = URL(string: "https://admindata.atmo-france.org/api/swagger/") {
+                        Link(destination: swaggerURL) {
+                            Label("Documentation API Swagger", systemImage: "server.rack")
+                        }
+                        .accessibilityLabel("Documentation API Swagger")
                     }
-                    .accessibilityLabel("Documentation API Swagger")
                 }
 
                 // MARK: Mentions légales

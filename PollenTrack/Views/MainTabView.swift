@@ -32,7 +32,12 @@ struct MainTabView: View {
                   let token = authStore.token,
                   authStore.isTokenValid else { return }
             Task {
-                await atmoService.fetchPollen(token: token, codeZone: newCode)
+                do {
+                    try await atmoService.fetchPollen(token: token, codeZone: newCode)
+                } catch is AuthError {
+                    // Token expired or invalid — force logout
+                    authStore.logout()
+                }
             }
         }
     }

@@ -278,7 +278,12 @@ struct HomeView: View {
         if let token = authStore.token,
            authStore.isTokenValid,
            !locationService.inseeCode.isEmpty {
-            await atmoService.fetchPollen(token: token, codeZone: locationService.inseeCode)
+            do {
+                try await atmoService.fetchPollen(token: token, codeZone: locationService.inseeCode)
+            } catch is AuthError {
+                // Token expired or invalid — force logout
+                authStore.logout()
+            }
         }
     }
 }
